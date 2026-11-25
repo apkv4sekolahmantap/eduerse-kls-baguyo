@@ -55,7 +55,7 @@ async function apiCall(ms, fn, args) {
   finally { clearTimeout(tm); }
   let r; try { r = JSON.parse(text); } catch (_) { const e = new Error('Respons server tidak valid. Pastikan Web App di-deploy: Execute as "Me", akses "Anyone", dan GAS_URL berakhiran /exec.'); e.net = true; e.code = 'BAD_RESPONSE'; throw e; }
   if (r && r.success) return r.data;
-  const e = new Error((r && r.message) || 'Terjadi kesalahan.'); e.code = r && r.code; if (e.code === 'SESI') onSessionExpired(); throw e;
+  const e = new Error((r && r.message) || 'Terjadi kesalahan.'); e.code = r && r.code; if (e.code === 'SESI') onSessionExpired(e.message); throw e;
 }
 const api = (fn, ...args) => apiCall(CFG.TIMEOUT_MS || 30000, fn, args);
 const apiLong = (fn, ...args) => apiCall(CFG.TIMEOUT_AI_MS || 120000, fn, args); // untuk pemanggilan AI (lebih lambat)
@@ -149,8 +149,8 @@ $('#ov').addEventListener('click', e => { if (e.target.id === 'ov' && !$('#ov').
 /* ---------- Sesi ---------- */
 function saveSession(role, token, user, boot) { App.role = role; App.token = token; App.user = user; store.set('ev_sess', { role, token }); if (boot) store.set('ev_boot_' + role, boot); }
 function clearSession() { store.del('ev_sess'); store.del('ev_boot_siswa'); store.del('ev_boot_guru'); store.del('ev_boot_admin'); App.token = null; App.role = null; App.user = null; }
-function onSessionExpired() {
-  if (!App.token) return; toast('Sesi berakhir, silakan masuk kembali.', 'wa'); const r = App.role; clearSession(); Stu.stop(); Tch.stop();
+function onSessionExpired(msg) {
+  if (!App.token) return; toast(msg || 'Sesi berakhir, silakan masuk kembali.', 'wa', 6000); const r = App.role; clearSession(); Stu.stop(); Tch.stop();
   if (r === 'siswa') showView('v-landing'); else { $('#tapp').classList.remove('on'); $('#tlogin').classList.add('on'); }
 }
 function logout() {

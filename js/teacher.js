@@ -140,7 +140,36 @@ TX.kelasForm = id => {
 TX.kelasSave = id => { const r = { ID: id || genId('KLS'), NamaKelas: val('fNama'), Mapel: val('fMapel'), Jenjang: val('fJen'), Status: val('fSt') }; if (id) r.KodeKelas = TS.cm[id].KodeKelas; if (r.NamaKelas.trim().length < 3) return toast('Nama kelas minimal 3 karakter', 'er'); mClose(); r.KodeKelas = r.KodeKelas || '…'; saveEnt('Kelas', r, !id).then(() => { tKelasSel(); toast('Kelas tersimpan', 'ok'); }).catch(() => { }); };
 TX.kelasToggle = id => { const c = TS.cm[id]; saveEnt('Kelas', Object.assign({}, c, { Status: c.Status === 'Aktif' ? 'Selesai' : 'Aktif' })).then(() => tKelasSel()).catch(() => { }); };
 TX.kelasDel = id => confirmDel('Hapus kelas <b>' + esc(TS.cm[id].NamaKelas) + '</b>? (Hanya bisa jika belum ada siswa/asesmen.)', () => delEnt('Kelas', id).then(() => tKelasSel()));
-TX.kelasSiswa = id => { const st = TS.b.students.filter(s => s.kelas === id).sort((a, b) => b.poin - a.poin); mOpen('Siswa — ' + esc(TS.cm[id].NamaKelas), st.length ? '<div class="twrap"><table class="tt"><thead><tr><th>Siswa</th><th>NISN</th><th class="num">Level</th><th class="num">Poin</th></tr></thead><tbody>' + st.map(s => '<tr><td>' + avs(s.avatar, 28) + ' ' + esc(s.nama) + '</td><td>' + esc(s.nisn || '-') + '</td><td class="num">' + s.level + '</td><td class="num">' + num(s.poin, 0) + '</td></tr>').join('') + '</tbody></table></div>' : empty('person_off', 'Belum ada siswa. Bagikan kode kelas.'), '<button class="tb" onclick="mClose()">Tutup</button>', true); };
+/* ---------- Daftar siswa kelas: cari, pilih, hapus ---------- */
+const SW = { id: '', q: '', sel: new Set() };
+TX.kelasSiswa = id => {
+  SW.id = id; SW.q = ''; SW.sel = new Set();
+  mOpen('Siswa — ' + esc((TS.cm[id] || {}).NamaKelas), '<div class="tools"><input class="tin" id="swQ" placeholder="Cari nama atau NISN…" aria-label="Cari siswa"><label style="display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointer"><input type="checkbox" id="swAll" onchange="TX.swAll(this.checked)"> Pilih semua yang tampak</label></div><div id="swList"></div>',
+    '<span id="swCnt" style="margin-right:auto;font-size:13px;color:var(--t-mu)"></span><button class="tb" onclick="mClose()">Tutup</button><button class="tb d" id="swDel" onclick="TX.swDelSel()" disabled>' + ico('person_remove', 18) + 'Hapus terpilih</button>', true);
+  $('#swQ').oninput = debounce(() => { SW.q = val('swQ').toLowerCase(); swRender(); }, 150); swRender();
+};
+function swRows() { return TS.b.students.filter(s => s.kelas === SW.id && (!SW.q || (s.nama + ' ' + (s.nisn || '')).toLowerCase().includes(SW.q))).sort((a, b) => b.poin - a.poin); }
+function swRender() {
+  const rows = swRows(), total = TS.b.students.filter(s => s.kelas === SW.id).length;
+  $('#swList').innerHTML = rows.length ? '<div class="twrap" style="max-height:52vh;overflow:auto"><table class="tt"><thead><tr><th style="width:34px"></th><th>Siswa</th><th>NISN</th><th class="num">Level</th><th class="num">Poin</th><th></th></tr></thead><tbody>' + rows.map(s => '<tr><td><input type="checkbox" aria-label="Pilih ' + esc(s.nama) + '" ' + (SW.sel.has(s.id) ? 'checked ' : '') + 'onchange="TX.swPick(\'' + s.id + '\',this.checked)"></td><td>' + avs(s.avatar, 28) + ' ' + esc(s.nama) + '</td><td>' + esc(s.nisn || '-') + '</td><td class="num">' + s.level + '</td><td class="num">' + num(s.poin, 0) + '</td><td><button class="tb sm ic d" aria-label="Hapus ' + esc(s.nama) + '" onclick="TX.swDelete([\'' + s.id + '\'])">' + ico('delete', 16) + '</button></td></tr>').join('') + '</tbody></table></div>' : empty(total ? 'search_off' : 'person_off', total ? 'Tidak ada siswa yang cocok.' : 'Belum ada siswa. Bagikan kode kelas.');
+  swCount();
+}
+function swCount() { const n = SW.sel.size, rows = swRows(), a = $('#swAll'); $('#swCnt').textContent = n ? n + ' dipilih' : TS.b.students.filter(s => s.kelas === SW.id).length + ' siswa'; $('#swDel').disabled = !n; if (a) a.checked = rows.length > 0 && rows.every(s => SW.sel.has(s.id)); }
+TX.swPick = (id, on) => { on ? SW.sel.add(id) : SW.sel.delete(id); swCount(); };
+TX.swAll = on => { swRows().forEach(s => on ? SW.sel.add(s.id) : SW.sel.delete(s.id)); swRender(); };
+TX.swDelSel = () => TX.swDelete([...SW.sel]);
+TX.swDelete = ids => {
+  const names = ids.map(i => (TS.sm[i] || {}).nama).filter(Boolean), kid = SW.id;
+  mOpen('Hapus siswa dari kelas?', '<p style="margin:0 0 8px"><b>' + ids.length + ' siswa</b> akan dihapus: ' + esc(names.slice(0, 5).join(', ')) + (names.length > 5 ? ' dan ' + (names.length - 5) + ' lainnya' : '') + '.</p><div class="ins">Akun beserta <b>seluruh nilai, jawaban, poin, dan catatan integritas</b> siswa ikut terhapus dan <b>tidak bisa dibatalkan</b>. Siswa yang sedang online langsung dikeluarkan. Sertifikat yang sudah terbit tetap tersimpan sebagai arsip.</div>',
+    '<button class="tb" onclick="TX.kelasSiswa(\'' + kid + '\')">Batal</button><button class="tb d" id="swYes">' + ico('delete', 18) + 'Ya, hapus ' + ids.length + ' siswa</button>');
+  $('#swYes').onclick = async () => {
+    const set = new Set(ids), b = TS.b, snap = { st: b.students.slice(), nl: b.nilai.slice(), lg: b.logs.slice() };
+    b.students = b.students.filter(s => !set.has(s.id)); b.nilai = b.nilai.filter(n => !set.has(n.IDSiswa)); b.logs = b.logs.filter(l => !set.has(l.IDSiswa)); idx(); render();
+    TX.kelasSiswa(kid); toast('Menghapus ' + ids.length + ' siswa…', 'in', 1500);
+    try { const r = await apiT('apiDeleteStudents', ids); persistBoot(); toast(r.deleted + ' siswa dihapus dari kelas', 'ok'); }
+    catch (e) { b.students = snap.st; b.nilai = snap.nl; b.logs = snap.lg; idx(); render(); if ($('#swList')) swRender(); toast(e.message, 'er', 5000); }
+  };
+};
 
 /* ---------- Bank soal ---------- */
 T.bank = function () {

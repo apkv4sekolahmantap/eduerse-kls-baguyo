@@ -108,6 +108,15 @@ Edit file → di folder kerja jalankan: `git add .` → `git commit -m "catatan"
 2. Frontend: timpa berkas lama dengan isi ZIP baru (tambah `js/ai.js`; `js/config.js` Anda **jangan ditimpa** — atau isi ulang `GAS_URL`).
 3. Di folder kerja: `git add .` → `git commit -m "Tambah fitur soal AI"` → `git push`, lalu **Ctrl+Shift+R** di situs.
 
+
+---
+## G. Mengelola daftar siswa kelas (hapus siswa)
+**Manajemen Kelas → tombol Siswa** pada kartu kelas: cari nama/NISN, centang beberapa siswa (atau **Pilih semua yang tampak**), lalu **Hapus terpilih**; atau klik ikon tong sampah pada satu baris.
+- Yang ikut terhapus: akun, nilai, jawaban, poin, dan catatan integritas siswa. **Tidak bisa dibatalkan.**
+- Siswa yang sedang online langsung dikeluarkan ke halaman awal dengan pesan "Akunmu telah dihapus oleh guru."
+- Sertifikat yang sudah terbit tetap tersimpan sebagai arsip; QR-nya menampilkan "(siswa telah dihapus dari kelas)".
+- Guru hanya dapat menghapus siswa di kelas miliknya; admin dapat semua kelas. Siswa bisa bergabung lagi dengan kode kelas sebagai akun baru.
+
 ## Troubleshooting cepat
 | Gejala | Penyebab | Solusi |
 |---|---|---|
