@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#100c38">
+<title>EduVerse Kelas Baguyo — Belajar &amp; Ujian Jadi Petualangan 3D</title>
+<meta name="description" content="Platform game edukasi 3D multiplayer dengan sistem asesmen (latihan harian, STS, SAS) untuk sekolah.">
+<meta property="og:title" content="EduVerse Kelas Baguyo"><meta property="og:description" content="Belajar &amp; ujian jadi petualangan mabar 3D bersama teman sekelas."><meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23ffc83d'/%3E%3Cpath d='M32 14 8 26l24 12 24-12zM16 34v10c0 4 7 8 16 8s16-4 16-8V34l-16 8z' fill='%23251a00'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://script.google.com"><link rel="preconnect" href="https://script.googleusercontent.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- Loader awal: hilang begitu JS siap (<300ms) -->
+<div id="boot"><div class="logo"><span class="material-symbols-outlined fill" style="font-size:34px">school</span></div></div>
+<div id="netbar" class="netbar" role="status">Koneksi terputus — jawabanmu aman di perangkat dan akan dikirim otomatis.</div>
+<div id="toasts" aria-live="polite"></div>
+
+<!-- =============== SISWA: Landing =============== -->
+<main id="v-landing" class="sv">
+  <div class="glow1"></div><div class="glow2"></div>
+  <div class="scroll"><div class="col">
+    <header class="row between hdr">
+      <div class="brand"><div class="ico"><span class="material-symbols-outlined fill">school</span></div><div><b>Edu<i>Verse</i></b><small>Kelas Baguyo</small></div></div>
+      <button class="btnq row g8" id="btnGuru" type="button"><span class="material-symbols-outlined" style="font-size:18px">person</span>Masuk Guru</button>
+    </header>
+    <section>
+      <div class="pill mt16"><span class="material-symbols-outlined" style="font-size:16px">sports_esports</span>Petualangan Belajar 3D</div>
+      <h1 class="hero-t">Belajar &amp; ujian jadi <em>petualangan mabar!</em></h1>
+      <p class="lead">Jelajahi kota 3D bersama teman sekelas, selesaikan misi soal, dan raih peringkat tertinggi.</p>
+      <div class="mt24"><button class="btn3" id="btnKode" type="button"><span class="material-symbols-outlined fill">key</span>Masuk dengan Kode Kelas</button></div>
+      <div class="mt12"><button class="btn2" id="btnMandiri" type="button"><span class="material-symbols-outlined">explore</span>Belajar Mandiri</button></div>
+      <div class="hero mt24" id="heroBox"></div>
+      <div class="row g8 wrap mt24" style="justify-content:center">
+        <span class="chip"><span class="material-symbols-outlined" style="font-size:18px;color:var(--tert)">smartphone</span>HP</span>
+        <span class="chip"><span class="material-symbols-outlined" style="font-size:18px;color:var(--pri)">laptop_mac</span>Laptop</span>
+        <span class="chip"><span class="material-symbols-outlined" style="font-size:18px;color:var(--sec)">cast</span>Proyektor</span>
+      </div>
+    </section>
+    <section class="mt24" id="feats">
+      <div class="feat"><div class="ic"><span class="material-symbols-outlined fill">diversity_3</span></div><div><h3>Mabar Satu Kelas</h3><p>Masuk pakai kode guru, avatar langsung muncul bareng teman sekelas.</p></div></div>
+      <div class="feat"><div class="ic"><span class="material-symbols-outlined fill">quiz</span></div><div><h3>Misi Soal Seru</h3><p>Jawab kuis sambil jelajahi kota 3D dan kumpulkan poin bintang.</p></div></div>
+      <div class="feat"><div class="ic"><span class="material-symbols-outlined fill">emoji_events</span></div><div><h3>Peringkat Real-Time</h3><p>Pantau skor langsung di layar proyektor dan raih posisi juara.</p></div></div>
+    </section>
+  </div></div>
+</main>
+
+<!-- =============== SISWA: Gabung kelas =============== -->
+<main id="v-join" class="sv">
+  <div class="topbar-s"><button class="iconb" id="joinBack" type="button" aria-label="Kembali"><span class="material-symbols-outlined">arrow_back_ios_new</span></button><h2>Gabung Kelas</h2></div>
+  <div class="scroll"><div class="col"><form class="card-s" id="joinForm" autocomplete="off" novalidate>
+    <div class="row between"><div class="steps"><i class="on"></i><i></i></div><span class="pill" style="color:var(--on)"><span class="material-symbols-outlined" style="font-size:16px;color:var(--pri)">sports_esports</span>Kelas Baguyo</span></div>
+    <h2 style="font-size:28px;line-height:34px;font-weight:800;margin:18px 0 4px;letter-spacing:-.02em">Gabung ke Kelas</h2>
+    <p class="mut" style="margin:0" id="joinSub">Masukkan 6 digit kode kelas dari gurumu</p>
+    <div id="codeWrap"><div class="otp" id="otp"></div></div>
+    <div class="lbl">Nama Panggilan</div>
+    <input class="inp-s" id="joinNama" maxlength="20" placeholder="Contoh: Budi_8A" autocomplete="nickname" enterkeyhint="done">
+    <div class="lbl">Pilih Avatarmu <small id="avName"></small></div>
+    <div class="avgrid" id="avGrid" role="radiogroup" aria-label="Pilih avatar"></div>
+    <div class="err-s" id="joinErr" role="alert"></div>
+    <button class="btn3 mt8" id="joinGo" type="submit"><span id="joinGoT">Masuk ke Dunia</span><span class="material-symbols-outlined fill">rocket_launch</span></button>
+  </form></div></div>
+</main>
+
+<!-- =============== SISWA: Dunia 3D =============== -->
+<main id="v-world" class="sv">
+  <canvas id="world" aria-label="Dunia 3D EduVerse"></canvas>
+  <div class="wlabels" id="wlabels"></div>
+  <div class="hud">
+    <div class="hudtop">
+      <div class="pcard glass"><div class="av" id="hAv"></div><div class="grow"><b class="ell" id="hName" style="display:block;font-size:14px">-</b><span class="ell mut" id="hLv" style="display:block;font-size:12px">-</span><div class="xpbar"><i id="hXp" style="width:0"></i></div></div></div>
+      <div class="hbtns">
+        <button class="hb glass" id="bPause" type="button" aria-label="Jeda" style="color:var(--pri)"><span class="material-symbols-outlined fill">pause</span></button>
+        <button class="hb glass" id="bFriends" type="button" aria-label="Teman online" style="color:var(--tert-d)"><span class="material-symbols-outlined">public</span></button>
+        <button class="hb glass nt" id="bMisi" type="button" aria-label="Misi" style="color:#f5bf34"><span class="material-symbols-outlined">assignment</span></button>
+        <button class="hb glass hide-sm" id="bCostume" type="button" aria-label="Kostum"><span class="material-symbols-outlined">checkroom</span></button>
+        <button class="hb glass" id="bMap" type="button" aria-label="Peta mini" style="color:var(--tert)"><span class="material-symbols-outlined">map</span></button>
+      </div>
+    </div>
+    <div class="hudmid"><div class="hint glass" id="hHint">💡 Dekati tanda seru kuning (!) untuk mulai misi soal!</div><div class="online glass"><i></i><span id="hOnline">1 online</span></div></div>
+    <div class="examban hide" id="examBan"><span class="material-symbols-outlined fill">edit_note</span><span id="examBanT">Ujian sedang berlangsung</span><button type="button" id="examBanGo">Mulai</button></div>
+  </div>
+  <div class="joy" id="joy" aria-label="Joystick"><i id="joyK"></i></div>
+  <div class="acts">
+    <button class="act j glass" id="bJump" type="button"><span class="material-symbols-outlined">arrow_upward</span>Lompat</button>
+    <button class="act i" id="bAct" type="button"><span class="material-symbols-outlined fill" style="font-size:28px">touch_app</span>Interaksi</button>
+  </div>
+  <div class="pause hide" id="pausePane"><div><div class="brand" style="justify-content:center"><div class="ico"><span class="material-symbols-outlined fill">pause</span></div></div><h2 style="font-size:26px;font-weight:800;margin:14px 0 4px">Game Dijeda</h2><p class="mut">Rehat sebentar, petualangan menunggumu.</p><div class="mt16"><button class="btn3" id="pResume" type="button">Lanjut Bermain</button></div><div class="mt12"><button class="btn2" id="pExit" type="button">Keluar</button></div></div></div>
+  <div class="bnav" data-nav></div>
+</main>
+
+<!-- =============== SISWA: Peringkat & Profil =============== -->
+<main id="v-ranks" class="sv hasnav"><div class="topbar-s"><h2>Papan Peringkat</h2><div class="whoami"><span class="material-symbols-outlined" style="font-size:20px">person</span></div></div><div class="scroll" id="ranksBody"><div class="col"></div></div><div class="bnav" data-nav></div></main>
+<main id="v-profile" class="sv hasnav"><div class="topbar-s"><h2>Profil &amp; Nilai</h2><button class="iconb" id="btnLogoutS" type="button" aria-label="Keluar"><span class="material-symbols-outlined">logout</span></button></div><div class="scroll" id="profBody"><div class="col"></div></div><div class="bnav" data-nav></div></main>
+
+<!-- =============== Verifikasi sertifikat (?cek=) =============== -->
+<main id="v-cek" class="sv"><div class="scroll"><div class="col"><div class="card-s" id="cekBox"><span class="spin" style="width:34px;height:34px;color:var(--pri)"></span><p class="mut">Memeriksa sertifikat…</p></div><div class="mt16"><button class="btn2" id="cekHome" type="button">Buka EduVerse</button></div></div></div></main>
+
+<!-- =============== SISWA: Mode ujian =============== -->
+<main id="v-ujian" class="sv">
+  <div class="topbar-s"><button class="iconb" id="exBack" type="button" aria-label="Kembali"><span class="material-symbols-outlined">arrow_back_ios_new</span></button><h2 id="exTitle">Assessment Mode</h2></div>
+  <div class="scroll"><div class="col" id="exBody"></div></div>
+  <div class="pause hide" id="exPause"><div><span class="material-symbols-outlined fill" style="font-size:56px;color:var(--pri)">pause_circle</span><h2 style="font-size:24px;font-weight:800;margin:8px 0">Ujian Dijeda Guru</h2><p class="mut">Waktu ditahan. Tunggu instruksi gurumu.</p></div></div>
+</main>
+
+<!-- Bottom sheet siswa (misi, panel, hasil) -->
+<div class="ov" id="ov"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
+
+<!-- =============== GURU: Login =============== -->
+<div id="tlogin"><div class="tl"><form class="tcard tlogin" id="tLoginForm" novalidate>
+  <div class="row g12" style="margin-bottom:16px"><div class="lg" style="width:44px;height:44px;border-radius:10px;background:var(--t-gold);color:#251a00;display:grid;place-items:center"><span class="material-symbols-outlined fill">school</span></div><div><h3 style="font-size:20px;margin:0;font-family:var(--f-h)">EduVerse Guru Portal</h3><div style="color:var(--t-mu);font-size:13px">Masuk untuk mengelola kelas &amp; ujian</div></div></div>
+  <div class="fld"><label for="tUser">Username</label><input class="tin" id="tUser" autocomplete="username" autocapitalize="none" required></div>
+  <div class="fld"><label for="tPass">Password</label><input class="tin" id="tPass" type="password" autocomplete="current-password" required></div>
+  <div class="err-s" id="tErr" style="color:var(--t-er);min-height:18px" role="alert"></div>
+  <button class="tb p" style="width:100%" id="tGo" type="submit">Masuk</button>
+  <button class="tb" style="width:100%;margin-top:8px" id="tBack" type="button">Kembali ke halaman siswa</button>
+</form></div></div>
+
+<!-- =============== GURU: Aplikasi =============== -->
+<div id="tapp">
+  <div class="ovl" id="tOvl"></div>
+  <aside class="side" id="tSide">
+    <div class="bh"><div class="lg"><span class="material-symbols-outlined fill">school</span></div><div><b id="tBrand">EduVerse</b><small>GURU PORTAL</small></div></div>
+    <nav id="tNav" aria-label="Menu utama"></nav>
+    <div class="foot"><div class="ua" id="tUa">G</div><div class="grow"><b class="ell" id="tUn" style="display:block;font-size:13px">-</b><small id="tUr">-</small></div><button class="iconb" id="tOut" type="button" aria-label="Keluar" style="color:#c9d6ea"><span class="material-symbols-outlined">logout</span></button></div>
+  </aside>
+  <div class="tmain">
+    <header class="ttop">
+      <button class="tb ic menu" id="tMenu" type="button" aria-label="Menu"><span class="material-symbols-outlined">menu</span></button>
+      <span class="tpill"><span class="material-symbols-outlined" style="font-size:18px;color:var(--t-blue)">school</span><select class="tsel" id="tKelas" aria-label="Kelas aktif"></select></span>
+      <span class="tpill hide-sm"><span class="dot" id="tDot"></span><span id="tSync">Tersinkron</span></span>
+      <span class="sp"></span>
+      <button class="tb ic" id="tTheme" type="button" aria-label="Ganti tema"><span class="material-symbols-outlined">dark_mode</span></button>
+      <button class="tb ic" id="tRefresh" type="button" aria-label="Muat ulang data"><span class="material-symbols-outlined">refresh</span></button>
+    </header>
+    <div class="tpage" id="tPage">
+      <section class="tsec" id="t-dashboard"></section>
+      <section class="tsec" id="t-kelas"></section>
+      <section class="tsec" id="t-bank"></section>
+      <section class="tsec" id="t-asesmen"></section>
+      <section class="tsec" id="t-misi"></section>
+      <section class="tsec" id="t-cctv"></section>
+      <section class="tsec" id="t-integritas"></section>
+      <section class="tsec" id="t-rekap"></section>
+      <section class="tsec" id="t-sertifikat"></section>
+      <section class="tsec" id="t-admin"></section>
+    </div>
+  </div>
+</div>
+<div class="mov" id="mov"><div class="mdl" id="mdl" role="dialog" aria-modal="true"></div></div>
+
+<noscript><p style="position:fixed;inset:0;background:#100c38;color:#e3dfff;display:grid;place-items:center;margin:0;font-family:sans-serif;text-align:center;padding:24px;z-index:1000">EduVerse membutuhkan JavaScript. Aktifkan JavaScript di browser Anda.</p></noscript>
+<script src="js/config.js"></script>
+<script src="js/core.js"></script>
+<script src="js/world.js"></script>
+<script src="js/student.js"></script>
+<script src="js/teacher.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
