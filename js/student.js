@@ -61,6 +61,7 @@ const Stu = (() => {
     }, first ? 600 : (document.hidden ? sync() * 3 : sync()));
   }
   function apply(d) {
+    if (d.mv && B.mv && d.mv !== B.mv && !A) { B.mv = d.mv; apiT('apiStudentBoot').then(b => { if (!A) { refresh(b); toast('📌 Ada misi/ujian baru dari gurumu!', 'wa', 4000); } }).catch(() => { }); }
     others = d.others; World.setOthers(d.others); $('#hOnline').textContent = d.online + ' online'; App.offset = d.now - Date.now(); notices(d);
     let ch = false; (d.ex || []).forEach(e => { const u = B.ujian.find(x => x.id === e.id); if (u && u.status !== e.st) { if (e.st === 'berlangsung' && u.status === 'dijadwalkan') toast('📝 ' + u.jenis + ' “' + u.judul + '” sudah dimulai!', 'wa', 6000); u.status = e.st; ch = true; } }); if (ch) hud();
   }

@@ -44,9 +44,9 @@ const LIB = {
    Respons selalu JSON {success, data, message, code}. */
 const CFG = window.EDUVERSE_CONFIG || {};
 const gasReady = () => !!CFG.GAS_URL && !/XXXX|ISI_URL/i.test(CFG.GAS_URL) && /\/exec$/.test(CFG.GAS_URL);
-async function api(fn, ...args) {
+async function apiCall(ms, fn, args) {
   if (!gasReady()) { const e = new Error('Backend belum terhubung: isi GAS_URL di js/config.js lalu push ulang.'); e.code = 'CONFIG'; throw e; }
-  const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), CFG.TIMEOUT_MS || 30000);
+  const ctl = new AbortController(), tm = setTimeout(() => ctl.abort(), ms);
   let text;
   try {
     const res = await fetch(CFG.GAS_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: fn, args }), signal: ctl.signal, redirect: 'follow' });
@@ -57,7 +57,10 @@ async function api(fn, ...args) {
   if (r && r.success) return r.data;
   const e = new Error((r && r.message) || 'Terjadi kesalahan.'); e.code = r && r.code; if (e.code === 'SESI') onSessionExpired(); throw e;
 }
+const api = (fn, ...args) => apiCall(CFG.TIMEOUT_MS || 30000, fn, args);
+const apiLong = (fn, ...args) => apiCall(CFG.TIMEOUT_AI_MS || 120000, fn, args); // untuk pemanggilan AI (lebih lambat)
 const apiT = (fn, ...a) => api(fn, App.token, ...a);
+const apiTL = (fn, ...a) => apiLong(fn, App.token, ...a);
 
 /* ---------- Toast ---------- */
 function toast(msg, type, ms) {

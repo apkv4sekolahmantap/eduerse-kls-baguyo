@@ -6,7 +6,7 @@ Platform game edukasi 3D + asesmen (latihan harian, STS, SAS). Frontend statis (
 index.html        ← halaman utama (harus di root repo)
 css/style.css
 js/config.js      ← SATU-SATUNYA berkas yang perlu diedit: isi GAS_URL
-js/core.js  js/world.js  js/student.js  js/teacher.js  js/app.js
+js/core.js  js/world.js  js/student.js  js/teacher.js  js/ai.js  js/app.js
 ```
 
 Cara pasang lengkap: lihat `PANDUAN-INSTALASI.md`.
