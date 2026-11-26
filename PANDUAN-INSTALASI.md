@@ -117,6 +117,28 @@ Edit file → di folder kerja jalankan: `git add .` → `git commit -m "catatan"
 - Sertifikat yang sudah terbit tetap tersimpan sebagai arsip; QR-nya menampilkan "(siswa telah dihapus dari kelas)".
 - Guru hanya dapat menghapus siswa di kelas miliknya; admin dapat semua kelas. Siswa bisa bergabung lagi dengan kode kelas sebagai akun baru.
 
+
+---
+## H. Daftar akun guru & admin
+Di halaman **Masuk Guru** ada tab **Daftar Akun**. Admin mengatur aturannya di **Admin Panel → Pendaftaran akun guru & admin**:
+
+| Pengaturan | Arti |
+|---|---|
+| Mode **Perlu persetujuan** (bawaan) | Guru yang mendaftar berstatus *Menunggu*; admin menekan **Setujui/Tolak** di Admin Panel. |
+| Mode **Terbuka** | Guru langsung aktif dan masuk setelah mendaftar. |
+| Mode **Ditutup** | Pendaftaran guru tidak bisa dilakukan. |
+| **Kode pendaftaran guru** (opsional) | Jika diisi, calon guru wajib memasukkannya (bagikan lewat grup guru). |
+| **Kode admin** | Wajib diisi agar *admin baru* bisa mendaftar. Tanpa kode ini, pilihan admin tidak aktif. |
+
+Kode disimpan di server dan tidak ditampilkan lagi setelah disimpan — salin dulu (tombol **Acak** membuat kode kuat) sebelum menekan **Simpan**.
+Password minimal 8 karakter dan harus berisi huruf + angka. Pendaftaran dibatasi 20 per jam. **Email tidak diverifikasi**, jadi untuk sekolah gunakan mode persetujuan atau kode pendaftaran.
+
+> ⚠️ **Segera ganti** akun bawaan `admin / admin123` dan `guru / guru123` (Admin Panel → ✏), atau nonaktifkan setelah Anda punya akun sendiri.
+
+## I. Hapus kelas (beserta isinya)
+**Manajemen Kelas → ikon tong sampah.** Jika kelas masih berisi siswa/asesmen, dialog menampilkan jumlahnya dan Anda harus mencentang persetujuan. Yang ikut terhapus permanen: siswa, asesmen, misi di peta, hasil ujian, jawaban, dan log integritas. **Bank soal dan sertifikat tidak terhapus.** Siswa yang sedang online langsung dikeluarkan.
+Kelas **MANDIRI** (untuk tombol *Belajar Mandiri*) boleh dihapus, tetapi tombol itu tidak berfungsi sampai Anda membuat kelas baru berkode `MANDIRI`.
+
 ## Troubleshooting cepat
 | Gejala | Penyebab | Solusi |
 |---|---|---|
@@ -127,4 +149,6 @@ Edit file → di folder kerja jalankan: `git add .` → `git commit -m "catatan"
 | Login/gabung lambat pertama kali | Cold start GAS | Normal; trigger `installTriggers` mengurangi |
 | "Kunci API ditolak" saat buat soal AI | Kunci salah/kedaluwarsa/belum aktif | Buat kunci baru, simpan di Pengaturan AI, Tes Koneksi |
 | "Batas pemakaian/kuota AI" | Kuota akun AI habis | Tunggu, atau pakai kunci/penyedia lain |
+| "Akun Anda masih menunggu persetujuan admin" | Mode pendaftaran = persetujuan | Admin menyetujui di Admin Panel |
+| Kelas tidak bisa dihapus | Memakai versi lama | Update `Kode.gs` (New version) dan frontend, lalu Ctrl+Shift+R |
 | QR sertifikat tidak terbuka | Sertifikat dibuat saat memakai file lokal | Buat dari situs `https://...github.io/...` |

@@ -112,15 +112,30 @@
 <!-- Bottom sheet siswa (misi, panel, hasil) -->
 <div class="ov" id="ov"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
 
-<!-- =============== GURU: Login =============== -->
-<div id="tlogin"><div class="tl"><form class="tcard tlogin" id="tLoginForm" novalidate>
-  <div class="row g12" style="margin-bottom:16px"><div class="lg" style="width:44px;height:44px;border-radius:10px;background:var(--t-gold);color:#251a00;display:grid;place-items:center"><span class="material-symbols-outlined fill">school</span></div><div><h3 style="font-size:20px;margin:0;font-family:var(--f-h)">EduVerse Guru Portal</h3><div style="color:var(--t-mu);font-size:13px">Masuk untuk mengelola kelas &amp; ujian</div></div></div>
-  <div class="fld"><label for="tUser">Username</label><input class="tin" id="tUser" autocomplete="username" autocapitalize="none" required></div>
-  <div class="fld"><label for="tPass">Password</label><input class="tin" id="tPass" type="password" autocomplete="current-password" required></div>
-  <div class="err-s" id="tErr" style="color:var(--t-er);min-height:18px" role="alert"></div>
-  <button class="tb p" style="width:100%" id="tGo" type="submit">Masuk</button>
-  <button class="tb" style="width:100%;margin-top:8px" id="tBack" type="button">Kembali ke halaman siswa</button>
-</form></div></div>
+<!-- =============== GURU / ADMIN: Masuk & Daftar =============== -->
+<div id="tlogin"><div class="tl"><div class="tcard tlogin">
+  <div class="row g12" style="margin-bottom:14px"><div class="lg" style="width:44px;height:44px;border-radius:10px;background:var(--t-gold);color:#251a00;display:grid;place-items:center"><span class="material-symbols-outlined fill">school</span></div><div><h3 style="font-size:20px;margin:0;font-family:var(--f-h)">EduVerse Guru Portal</h3><div style="color:var(--t-mu);font-size:13px">Untuk guru &amp; admin sekolah</div></div></div>
+  <div class="seg2" id="tTabs" role="tablist" style="width:100%;margin-bottom:14px"><button type="button" role="tab" data-t="in" class="on" style="flex:1">Masuk</button><button type="button" role="tab" data-t="up" style="flex:1">Daftar Akun</button></div>
+  <form id="tLoginForm" novalidate>
+    <div class="fld"><label for="tUser">Username</label><input class="tin" id="tUser" autocomplete="username" autocapitalize="none" required></div>
+    <div class="fld"><label for="tPass">Password</label><input class="tin" id="tPass" type="password" autocomplete="current-password" required></div>
+    <div class="err-s" id="tErr" style="color:var(--t-er);min-height:18px" role="alert"></div>
+    <button class="tb p" style="width:100%" id="tGo" type="submit">Masuk</button>
+    <button class="tb" style="width:100%;margin-top:8px" id="tBack" type="button">Kembali ke halaman siswa</button>
+  </form>
+  <form id="tRegForm" class="hide" novalidate>
+    <div id="rInfo" style="font-size:12px;color:var(--t-mu);margin-bottom:10px"></div>
+    <div class="fld"><label for="rPeran">Daftar sebagai</label><select class="tsl" id="rPeran"><option value="guru">Guru</option><option value="admin">Admin sekolah</option></select></div>
+    <div class="fld"><label for="rNama">Nama lengkap</label><input class="tin" id="rNama" autocomplete="name" maxlength="60"></div>
+    <div class="fld"><label for="rEmail">Email atau NIP <span style="font-weight:400">(opsional)</span></label><input class="tin" id="rEmail" autocomplete="email" autocapitalize="none" maxlength="80"></div>
+    <div class="fld"><label for="rUser">Username</label><input class="tin" id="rUser" autocomplete="username" autocapitalize="none" maxlength="30" placeholder="huruf kecil/angka, mis. budi.santoso"></div>
+    <div class="frow"><div class="fld"><label for="rPass">Password</label><input class="tin" id="rPass" type="password" autocomplete="new-password" placeholder="min. 8, huruf + angka"></div><div class="fld"><label for="rPass2">Ulangi password</label><input class="tin" id="rPass2" type="password" autocomplete="new-password"></div></div>
+    <div class="fld hide" id="rKodeW"><label for="rKode" id="rKodeL">Kode pendaftaran</label><input class="tin" id="rKode" autocomplete="off" autocapitalize="none"></div>
+    <div class="err-s" id="rErr" style="color:var(--t-er);min-height:18px" role="alert"></div>
+    <button class="tb p" style="width:100%" id="rGo" type="submit">Daftar</button>
+    <button class="tb" style="width:100%;margin-top:8px" id="tBack2" type="button">Kembali ke halaman siswa</button>
+  </form>
+</div></div></div>
 
 <!-- =============== GURU: Aplikasi =============== -->
 <div id="tapp">
@@ -162,6 +177,7 @@
 <script src="js/student.js"></script>
 <script src="js/teacher.js"></script>
 <script src="js/ai.js"></script>
+<script src="js/auth.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

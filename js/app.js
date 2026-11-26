@@ -2,7 +2,7 @@
    EduVerse — titik masuk aplikasi (dimuat paling akhir)
    ===================================================================== */
 (function main() {
-  setTheme(store.get('ev_theme', 'light')); tBind(); Stu.initJoin(); showView('v-landing');
+  setTheme(store.get('ev_theme', 'light')); tBind(); authBind(); Stu.initJoin(); showView('v-landing');
   const hide = () => { const b = $('#boot'); if (b) { b.style.opacity = '0'; setTimeout(() => b.remove(), 260); } };
   // Jika font ikon gagal dimuat (offline), sembunyikan teks ligatur agar layout tidak rusak
   const chkIcons = () => { const t = document.createElement('span'); t.style.cssText = "position:absolute;visibility:hidden;white-space:nowrap;font-family:'Material Symbols Outlined';font-size:24px"; t.textContent = 'home'; document.body.appendChild(t); const w = t.offsetWidth; t.remove(); document.body.classList.toggle('noicons', w > 40); };
