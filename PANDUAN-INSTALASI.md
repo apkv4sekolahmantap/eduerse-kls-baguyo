@@ -139,6 +139,23 @@ Password minimal 8 karakter dan harus berisi huruf + angka. Pendaftaran dibatasi
 **Manajemen Kelas → ikon tong sampah.** Jika kelas masih berisi siswa/asesmen, dialog menampilkan jumlahnya dan Anda harus mencentang persetujuan. Yang ikut terhapus permanen: siswa, asesmen, misi di peta, hasil ujian, jawaban, dan log integritas. **Bank soal dan sertifikat tidak terhapus.** Siswa yang sedang online langsung dikeluarkan.
 Kelas **MANDIRI** (untuk tombol *Belajar Mandiri*) boleh dihapus, tetapi tombol itu tidak berfungsi sampai Anda membuat kelas baru berkode `MANDIRI`.
 
+
+---
+## J. CCTV Live 3D & Layar Penuh
+Menu **CCTV Live → tombol Kota 3D (Live)**: guru melihat kota voxel **yang sama persis dengan layar HP siswa**, lengkap dengan avatar siswa yang bergerak, nama, tanda misi "!", dan cincin warna status (biru aman, kuning perhatian, merah pelanggaran). Siswa yang sedang ujian menampilkan progres (mis. `3/8`).
+- **Overview** (dari atas): seret untuk memutar, roda mouse atau tombol **＋/−** untuk zoom, **⟲** untuk mengatur ulang kamera.
+- **Ikuti siswa**: klik nama siswa pada daftar di bawah → kamera mengikuti dengan sudut pandang seperti layar HP siswa. Klik lagi untuk kembali ke overview.
+- **Layar Penuh**: tombol di HUD atau di kartu *Matriks Siswa* (juga untuk tampilan Grid). Keluar dengan **Esc**. Panel anomali terbaru tampil di sisi kanan saat layar penuh.
+- Perangkat tanpa grafik 3D otomatis memakai peta 2D.
+> Gerak siswa diperbarui tiap 3–4 detik (polling), lalu dihaluskan oleh animasi — sama seperti pemain lain di game.
+
+## K. Rekap Nilai per Kelas (semua misi)
+**Rekap Nilai → tab "Per Kelas • Semua Misi"**: matriks seluruh siswa × seluruh misi/asesmen kelas terpilih (misi di peta, Latihan Harian, STS, SAS).
+- Ringkasan: jumlah siswa, jumlah misi & asesmen, rata-rata kelas, partisipasi, dan ketuntasan.
+- Tiap sel = nilai (klik untuk melihat lembar jawaban); `*` = menunggu nilai uraian; `–` = belum dikerjakan. Kolom akhir: Selesai, Rata-rata, Tuntas. Baris bawah: rata-rata per misi.
+- Cari siswa, saring (Semua / Misi di peta saja / STS / SAS / Latihan Harian), klik nama siswa untuk **Rapor** lengkapnya.
+- **Unduh Excel** dan **Cetak PDF** (kolom diberi kode M1…Mn + legenda). Ganti kelas lewat pilihan kelas di bagian atas halaman.
+
 ## Troubleshooting cepat
 | Gejala | Penyebab | Solusi |
 |---|---|---|

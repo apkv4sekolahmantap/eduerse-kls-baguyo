@@ -21,7 +21,7 @@ const World = (() => {
     };
   }
 
-  function buildCity() {
+  function buildCity(sc, cols) {
     const L = Mesher(), B = Mesher(); let rs = 11; const rnd = () => (rs = (rs * 9301 + 49297) % 233280) / 233280;
     L.box(0, -0.6, 0, 100, 0.6, 100, '#2f8f4a');                          // rumput
     L.box(0, 0, -4, 8, 0.05, 52, '#353847'); L.box(0, 0, 0, 60, 0.05, 8, '#353847'); // jalan
@@ -33,7 +33,7 @@ const World = (() => {
     for (let z = -28; z <= 20; z += 4) B.box(0, 0.07, z, 0.3, 0.02, 1.8, '#ddd');
     const bld = (cx, cz, w, d, h, col, roof, front, tag) => {
       L.box(cx, 0, cz, w, h, d, col); L.box(cx, h, cz, w + 0.6, 0.5, d + 0.6, roof);
-      colliders.push({ x0: cx - w / 2 - .5, x1: cx + w / 2 + .5, z0: cz - d / 2 - .5, z1: cz + d / 2 + .5 });
+      cols.push({ x0: cx - w / 2 - .5, x1: cx + w / 2 + .5, z0: cz - d / 2 - .5, z1: cz + d / 2 + .5 });
       const horiz = front[1] !== 0, n = Math.max(2, Math.floor((horiz ? w : d) / 2.4)), rows = Math.max(1, Math.floor((h - 1.2) / 2.2));
       for (let i = 0; i < n; i++) for (let j = 0; j < rows; j++) {
         const t = (i + 0.5) / n - 0.5, y = 1.8 + j * 2.2, lit = rnd() > .3 ? '#ffd86b' : '#27305c';
@@ -44,17 +44,17 @@ const World = (() => {
     };
     bld(-16, -13, 10, 8, 6, '#58708f', '#2e3d55', [0, 1], '#9fd8ff'); bld(16, -13, 14, 8, 8, '#a8503f', '#5b2a22', [0, 1], '#ffe28a');
     bld(-16, 13, 8, 7, 5, '#e08a3c', '#8a4a1a', [0, -1], '#ff6b5e'); bld(16, 13, 6, 6, 5, '#7a7fa3', '#3b3e5c', [0, -1]);
-    L.box(16, 5, 13, 3, 8, 3, '#c9c4e8'); L.box(16, 13, 13, 4, 2.4, 4, '#f4f0ff'); B.box(16, 14, 13 - 2.05, 1.8, 1.8, 0.1, '#fff6c8'); colliders.push({ x0: 13, x1: 19, z0: 10, z1: 16 });
+    L.box(16, 5, 13, 3, 8, 3, '#c9c4e8'); L.box(16, 13, 13, 4, 2.4, 4, '#f4f0ff'); B.box(16, 14, 13 - 2.05, 1.8, 1.8, 0.1, '#fff6c8'); cols.push({ x0: 13, x1: 19, z0: 10, z1: 16 });
     bld(0, -34, 16, 6, 8, '#b9b2d6', '#4a4470', [0, 1], '#ffe28a'); bld(-34, 0, 6, 12, 6, '#3f9a8a', '#1f5249', [1, 0]); bld(34, 0, 6, 14, 5, '#5e7bd6', '#27396b', [-1, 0]);
-    [[-24, -14, '#d46a6a'], [-24, 10, '#6aa5d4'], [24, -14, '#d4b36a'], [24, 12, '#8ad46a'], [-10, -20, '#a46ad4'], [10, -22, '#6ad4c0'], [-12, 24, '#d46aa0'], [12, 26, '#d4a46a']].forEach(h => { L.box(h[0], 0, h[1], 4, 3, 4, h[2]); L.box(h[0], 3, h[1], 4.6, 0.5, 4.6, '#47321f'); L.box(h[0], 3.5, h[1], 3, 1, 3, '#5a4028'); B.box(h[0], 1.2, h[1] + 2.04, 1, 1, 0.1, '#ffd86b'); colliders.push({ x0: h[0] - 2.5, x1: h[0] + 2.5, z0: h[1] - 2.5, z1: h[1] + 2.5 }); });
+    [[-24, -14, '#d46a6a'], [-24, 10, '#6aa5d4'], [24, -14, '#d4b36a'], [24, 12, '#8ad46a'], [-10, -20, '#a46ad4'], [10, -22, '#6ad4c0'], [-12, 24, '#d46aa0'], [12, 26, '#d4a46a']].forEach(h => { L.box(h[0], 0, h[1], 4, 3, 4, h[2]); L.box(h[0], 3, h[1], 4.6, 0.5, 4.6, '#47321f'); L.box(h[0], 3.5, h[1], 3, 1, 3, '#5a4028'); B.box(h[0], 1.2, h[1] + 2.04, 1, 1, 0.1, '#ffd86b'); cols.push({ x0: h[0] - 2.5, x1: h[0] + 2.5, z0: h[1] - 2.5, z1: h[1] + 2.5 }); });
     for (let i = 0; i < 46; i++) { const x = (rnd() - .5) * 74, z = (rnd() - .5) * 74; if (Math.abs(x) < 8 || Math.abs(z) < 8 || colliders.some(c => x > c.x0 - 2 && x < c.x1 + 2 && z > c.z0 - 2 && z < c.z1 + 2) || (Math.abs(x) > 30 && Math.abs(z) < 12) || z < -29 && Math.abs(x) < 12) continue; L.box(x, 0, z, .5, 1.6, .5, '#6b4a2b'); L.box(x, 1.6, z, 2.4, 2, 2.4, '#2fa64f'); L.box(x, 3.6, z, 1.5, 1.2, 1.5, '#4fcf6e'); }
     for (let k = -3; k <= 3; k++) { if (!k) continue; [-1, 1].forEach(sd => { L.box(k * 9, 0, sd * 5.8, .2, 4.5, .2, '#3a3a52'); B.box(k * 9, 4.4, sd * 5.8, .8, .45, .8, '#ffe9a0'); }); }
-    L.box(0, 0, 27, 5, .6, 5, '#9a9ab5'); L.box(0, .6, 27, 1, 2.2, 1, '#c8c8e0'); B.box(0, .62, 27, 4, .05, 4, '#7cddff'); colliders.push({ x0: -3, x1: 3, z0: 24.5, z1: 29.5 });
+    L.box(0, 0, 27, 5, .6, 5, '#9a9ab5'); L.box(0, .6, 27, 1, 2.2, 1, '#c8c8e0'); B.box(0, .62, 27, 4, .05, 4, '#7cddff'); cols.push({ x0: -3, x1: 3, z0: 24.5, z1: 29.5 });
     const lit = L.mesh(new T.MeshLambertMaterial({ vertexColors: true })), glow = B.mesh(new T.MeshBasicMaterial({ vertexColors: true }));
-    scene.add(lit, glow);
+    sc.add(lit, glow);
     const sp = new Float32Array(240 * 3); for (let i = 0; i < 240; i++) { const a = rnd() * 6.283, e = .15 + rnd() * 1.2, r = 150; sp[i * 3] = Math.cos(a) * Math.cos(e) * r; sp[i * 3 + 1] = Math.sin(e) * r; sp[i * 3 + 2] = Math.sin(a) * Math.cos(e) * r; }
-    const sg = new T.BufferGeometry(); sg.setAttribute('position', new T.BufferAttribute(sp, 3)); scene.add(new T.Points(sg, new T.PointsMaterial({ color: 0xffffff, size: 1.6, fog: false })));
-    const moon = new T.Mesh(new T.SphereGeometry(7, 16, 12), new T.MeshBasicMaterial({ color: 0xfff6c8, fog: false })); moon.position.set(-60, 80, -120); scene.add(moon);
+    const sg = new T.BufferGeometry(); sg.setAttribute('position', new T.BufferAttribute(sp, 3)); sc.add(new T.Points(sg, new T.PointsMaterial({ color: 0xffffff, size: 1.6, fog: false })));
+    const moon = new T.Mesh(new T.SphereGeometry(7, 16, 12), new T.MeshBasicMaterial({ color: 0xfff6c8, fog: false })); moon.position.set(-60, 80, -120); sc.add(moon);
   }
 
   const mat = c => matC[c] || (matC[c] = new T.MeshLambertMaterial({ color: c }));
@@ -144,7 +144,7 @@ const World = (() => {
         scene = new T.Scene(); scene.background = new T.Color(0x1a1250); scene.fog = new T.Fog(0x2a1d6e, 40, 95);
         camera = new T.PerspectiveCamera(55, 1, .5, 400); camera.position.set(0, 9, 22);
         scene.add(new T.HemisphereLight(0x9fb0ff, 0x2a2150, .95)); const dl = new T.DirectionalLight(0xbcc8ff, .55); dl.position.set(-30, 50, -20); scene.add(dl);
-        buildCity(); me = makeAvatar(0); scene.add(me); ok = true; resize();
+        buildCity(scene, colliders); me = makeAvatar(0); scene.add(me); ok = true; resize();
       } catch (e) { failed = true; canvas.style.display = 'none'; $('#hHint').textContent = 'Grafik 3D tidak tersedia di perangkat ini. Buka daftar Misi untuk tetap bermain.'; }
     })();
   }
@@ -167,7 +167,9 @@ const World = (() => {
   function stop() { running = false; if (raf) cancelAnimationFrame(raf); raf = 0; inp.x = inp.y = 0; inp.keys = {}; }
   function reset() { stop(); remotes.forEach(r => scene && scene.remove(r.g)); remotes.clear(); $('#wlabels').innerHTML = ''; Object.keys(tags).forEach(k => delete tags[k]); Object.keys(markers).forEach(k => delete markers[k]); }
   return {
-    init, start, stop, reset, setMe, setMissions, setOthers, get ok() { return ok; }, get failed() { return failed; },
+    init, start, stop, reset, setMe, setMissions, setOthers,
+    // Kit bersama: dipakai mode pengawas CCTV guru agar kota & avatarnya identik dengan tampilan HP siswa
+    kit: { ensure: async () => { await LIB.three(); T = window.THREE; }, buildCity, makeAvatar, animate }, get ok() { return ok; }, get failed() { return failed; },
     state: () => ({ x: Math.round(st.x * 10) / 10, z: Math.round(st.z * 10) / 10, r: Math.round(st.r * 100) / 100 }),
     onInteract: f => { onInteract = f; }, nearest: () => near, remotes: () => Array.from(remotes.entries()).map(([id, r]) => ({ id, x: r.tx, z: r.tz, text: r.text })), pos: () => st
   };
